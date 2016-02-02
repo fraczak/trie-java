@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
-/**
- * Created by wojtek on 2/1/16.
- */
 public class Trie<E> {
 
     public static class Found<E> {
@@ -27,16 +25,11 @@ public class Trie<E> {
         private SortedMap<Character,Node<E>> dict = new TreeMap<Character,Node<E>>();
     }
 
-    private Function<E,String> toStr;
-    private Node root = null;
+    private final Function<E,String> toStr;
+    private Node<E> root = null;
 
     public Trie() {
-         this.toStr = new Function<E, String>() {
-             @Override
-             public String apply(E e) {
-                 return e.toString();
-             }
-         };
+         this.toStr = Object::toString;
     }
     public Trie(Function<E,String> toStr) {
         this.toStr = toStr;
@@ -104,8 +97,7 @@ public class Trie<E> {
         if (t.leaves.size() > 0)
             res.add(t.prefix);
         for(char a : t.dict.keySet())
-            for(String p : trieGetKeys(t.dict.get(a)))
-                res.add(t.prefix + a + p);
+            res.addAll(trieGetKeys(t.dict.get(a)).stream().map(p -> t.prefix + a + p).collect(Collectors.toList()));
         return res;
     }
 
@@ -130,9 +122,7 @@ public class Trie<E> {
             }
             return null;
         }
-        Found<E> res = new Found<E>(0,new ArrayList<E>(t.leaves));
-
-        return res;
+        return new Found<E>(0,new ArrayList<E>(t.leaves));
     }
 
     public List<E> getAtInTrie(Node<E> t, int start, int n) {

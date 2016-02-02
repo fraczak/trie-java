@@ -3,9 +3,6 @@ package fraczak.trie;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by wojtek on 2/1/16.
- */
 public class TrieTest {
 
     @Test
