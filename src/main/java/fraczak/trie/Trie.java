@@ -52,8 +52,12 @@ public class Trie<E> {
 //----------------------
 // ############### USER INTERFACE #################
 
-
-    public Integer find(E e) {
+    /**
+     * Find the index of `e` in trie
+     * @param e - element to find
+     * @return -1, if element is not in the try, or its position (index, starting from 0)
+     */
+    public int find(E e) {
         Found<E> searchResult = this.findByKey(this.toStr.apply(e));
         if (searchResult != null) {
             for (int i = 0; i < searchResult.res.size(); i++) {
@@ -61,26 +65,50 @@ public class Trie<E> {
                     return searchResult.pos + i;
             }
         }
-        return null;
+        return -1;
     }
 
+    /**
+     * Find all elements with key `key`
+     * @param key - string representation of element
+     * @return {pos: start_pos, res: List<E><}
+     */
     public Found<E> findByKey(String key) {
         return findInTrie(root,key);
     }
 
+    /**
+     * get keys
+     * @return list of keys in the trie
+     */
     public List<String> getKeys() {
         return trieGetKeys(root);
     }
 
+    /**
+     * retrive the element at position/index `n`
+     * @param n - position/index
+     * @return the element at the index `n`
+     */
     public E getNth(int n) {
         List<E> aux = getAtInTrie(root, n, 1);
         return aux.get(0);
     }
 
+    /**
+     * Get `n` elements starting at index `start`
+     * @param start - start index
+     * @param n - number of elements to take
+     * @return the list of at most `n` elements starting at index `start`
+     */
     public List<E> getAt(int start, int n) {
         return getAtInTrie(root, start, n);
     }
 
+    /**
+     *
+     * @return number of elements in the trie
+     */
     public int size() {
         if (root == null) {
             return 0;
